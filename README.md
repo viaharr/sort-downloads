@@ -1,86 +1,60 @@
-```markdown
-![Python](https://img.shields.io/badge/python-3.10%2B-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+Sort Downloads
 
-# Sort Downloads
+A minimal Python script to automatically organize the Downloads folder by file extensions.
 
-Скрипт, который автоматически раскладывает файлы из папки `Downloads` по подпапкам в зависимости от расширения.
+Features
 
-## Что делает
+- Sorts files into `Downloads/Sorted/` subfolders.
+- Categories: `Documents`, `Images`, `Archives`, `Installers`, `Torrents`.
+- Ignores folders and unknown extensions.
+- Prevents overwriting by appending `_1` to duplicate filenames.
 
-- Создаёт папку `Downloads/Sorted/`, если её нет.
-- Раскладывает файлы по категориям: `Documents`, `Images`, `Archives`, `Installers`, `Torrents`.
-- Не трогает папки и файлы с неизвестными расширениями.
-- Если файл с таким именем уже есть — добавляет `_1` к имени, не затирает.
-
-## Требования
+Requirements
 
 - Python 3.10+
-- Только стандартная библиотека (`shutil`, `pathlib`) — ничего ставить не надо.
+- Standard library only (`shutil`, `pathlib`)
 
-## Установка
+Usage
 
-```bash
-git clone https://github.com/ТВОЙ_НИК/sort-downloads.git
-cd sort-downloads
-```
+Run manually:
 
-## Использование
+`python sort_downloads.py`
 
-### Разовый запуск
+Setup Automated Run (Windows)
 
-```bash
-python sort_downloads.py
-```
+1. Press `Win + R`, type `taskschd.msc`, press Enter.
+2. On the right, click "Create Task" (not "Create Basic Task").
+3. **General** tab:
+   - Name: `Sort Downloads`
+   - Check "Run whether user is logged on or not".
+   - Check "Hidden" (so no console window pops up).
+4. **Triggers** tab -> New:
+   - "Repeat task every" -> `15 minutes`
+   - "for a duration of" -> `Indefinitely`
+5. **Actions** tab -> New:
+   - Program: `C:\Path\To\pythonw.exe` (find path below)
+   - Arguments: `C:\Path\To\sort_downloads.py`
+   - Start in: `C:\Path\To\`
+6. Click OK and enter your Windows password.
 
-Скрипт разложит файлы в `Downloads/Sorted/`.
+How to find `pythonw.exe` path:
 
-### Автозапуск
+Open Command Prompt and run:
 
-#### Windows — Планировщик заданий
+`where python`
 
-1. `Win + R` → `taskschd.msc` → `Enter`.
-2. Справа — «Создать задачу» (не «простую»).
-3. Вкладка «Общие»:
-   - Имя: `Sort Downloads`
-   - Галочка **«Скрытая»** (чтобы окно не мигало).
-4. Вкладка «Триггеры» → «Создать»:
-   - «Повторять задачу каждые» → 15 минут
-   - «В течение» → неограниченного срока
-5. Вкладка «Действия» → «Создать»:
-   - Программа: `pythonw.exe` (полный путь, см. ниже)
-   - Аргументы: `C:\путь\до\sort_downloads.py`
-   - Рабочая папка: `C:\путь\до\`
-6. **ОК**, ввести пароль Windows.
+Copy the output. Change `python.exe` to `pythonw.exe`. Example:
+`C:\Users\Name\AppData\Local\Programs\Python\Python312\pythonw.exe`
 
-Где взять путь к `pythonw.exe`:
+Setup Automated Run (macOS / Linux)
 
-```cmd
-where python
-```
+1. Open terminal and run `crontab -e`.
+2. Add this line:
+`*/15 * * * * /usr/bin/python3 /path/to/sort_downloads.py`
+3. Save and exit. Runs every 15 minutes.
 
-Выдаст что-то вроде `C:\Users\Ты\AppData\Local\Programs\Python\Python312\python.exe`. Замени в конце `python.exe` на `pythonw.exe` — это то же самое, но без окна консоли.
+Configuration
 
-#### macOS / Linux — cron
+Edit the `RULES` dictionary in `sort_downloads.py` to add new extensions:
 
-```bash
-crontab -e
-```
-
-Добавь строку:
-
-```
-*/15 * * * * /usr/bin/python3 /полный/путь/до/sort_downloads.py
-```
-
-Сохрани (`:wq` в vim). Скрипт будет запускаться каждые 15 минут без окон.
-
-## Настройка
-
-Правила раскладки — в словаре `RULES` в `sort_downloads.py`.
-
-Пример добавления нового расширения:
-
-```python
-".mp4": "Video",
-```
+`".mp4": "Video",`
